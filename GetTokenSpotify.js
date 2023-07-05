@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-async function getTokenSpotify() {
+function getTokenSpotify() {
     const URL = "https://accounts.spotify.com/api/token"
     return fetch(URL, {
         method: "POST",
@@ -14,4 +14,5 @@ async function getTokenSpotify() {
     .then(data => data.json())
     .then(response => response.access_token)
 }
-module.exports = getTokenSpotify
+
+module.exports = { getTokenSpotify }
