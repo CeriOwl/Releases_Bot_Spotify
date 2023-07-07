@@ -1,15 +1,15 @@
 const {getTokenSpotify} = require("./GetTokenSpotify")
 
-function getAlbums() {
+async function getAlbums() {
     const URL = "https://api.spotify.com/v1/browse/new-releases?country=US&limit=40"
-    getTokenSpotify().then(token => {
+    return getTokenSpotify().then(token => {
         fetchData(token, URL)
     })
 
 }
 
-function fetchData(token, URL) {
-    fetch(URL, {
+async function fetchData(token, URL) {
+    return fetch(URL, {
         headers: {
             "Authorization" : `Bearer ${token}`
         }
@@ -18,12 +18,16 @@ function fetchData(token, URL) {
         const [...items] = response.albums.items
         const items_to_send = []
         items.forEach(item => {
-            const album_data = new Object()
-            album_data.name = item.name
-            album_data.type = item.album_type
-            album_data.image = item.images[0]
-            album_data.artists = getArtists(item.artists)
+            if(getDate() === item.release_date) {
+                const album_data = new Object()
+                album_data.name = item.name
+                album_data.type = item.album_type
+                album_data.image = item.images[0].url
+                album_data.artists = getArtists(item.artists)
+                items_to_send.push(album_data)
+            }
         })
+        return items_to_send
     })
 }
 
@@ -33,14 +37,16 @@ function getArtists(artists) {
         formated_text = artists[0].name
     }else {
         for(let i = 0; i < artists.length; i++) {
-            if((i + 1) !== (artists.length - 1)) {
-                formated_text = `${artists[i].name}, `
+            if((i + 1) === (artists.length - 1)) {
+                formated_text += `${artists[i].name} & `
+            } else if (i === artists.length - 1) {
+                formated_text += artists[i].name
             } else {
-                formated_text = `${artists[i]}`
+                formated_text += `${artists[i].name}, `
             }
         }
     }
-    console.log(formated_text)
+    return formated_text
 }
 
 function getDate() {
@@ -48,4 +54,4 @@ function getDate() {
     return date.toISOString().split("T")[0]
 }
 
-getAlbums()
+module.exports = { getAlbums }

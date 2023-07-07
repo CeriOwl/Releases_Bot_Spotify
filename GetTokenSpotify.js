@@ -1,6 +1,6 @@
-require('dotenv').config();
+require('dotenv').config()
 
-function getTokenSpotify() {
+async function getTokenSpotify() {
     const URL = "https://accounts.spotify.com/api/token"
     return fetch(URL, {
         method: "POST",
