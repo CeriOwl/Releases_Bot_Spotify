@@ -1,9 +1,9 @@
-const {getTokenSpotify} = require("./GetTokenSpotify")
+const { getTokenSpotify } = require("./GetTokenSpotify")
 
 async function getAlbums() {
     const URL = "https://api.spotify.com/v1/browse/new-releases?country=US&limit=40"
     return getTokenSpotify().then(token => {
-        fetchData(token, URL)
+        return fetchData(token, URL)
     })
 
 }
@@ -24,6 +24,15 @@ async function fetchData(token, URL) {
                 album_data.type = item.album_type
                 album_data.image = item.images[0].url
                 album_data.artists = getArtists(item.artists)
+                album_data.date = item.release_date
+                items_to_send.push(album_data)
+            } else {
+                const album_data = new Object()
+                album_data.name = item.name
+                album_data.type = item.album_type
+                album_data.image = item.images[0].url
+                album_data.artists = getArtists(item.artists)
+                album_data.date = item.release_date
                 items_to_send.push(album_data)
             }
         })
