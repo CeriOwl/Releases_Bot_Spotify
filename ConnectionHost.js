@@ -8,4 +8,4 @@ const activateServer = () => {
     })
 }
 
-module.exports = activateServer
+module.exports = { activateServer }

@@ -9,8 +9,8 @@ const checkInDB = async () => {
         const all_data_db = await getData().then(data => data)
         for (const album of data_json) {
             if (!compare_data_and_db(album, all_data_db)) {
-                createTweet(album)
-                addToDb(album.name, album.type, album.artists)
+                //createTweet(album)
+                //addToDb(album.name, album.type, album.artists)
                 console.log(`${album.name} ready to publish`)
             } else {
                 console.log(`${album.name} is on the db`)

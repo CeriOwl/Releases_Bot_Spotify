@@ -1,12 +1,17 @@
 const checkInDB = require("./CheckDataInDb")
 const { getAlbums } = require("./GetReleases")
 const handleImages = require("./HandleImg")
+const cron = require("node-cron")
+const { deleteData } = require("./DeleteDB")
+const { getSizeDB } = require("./sizeDb")
+const { activateServer } = require("./ConnectionHost")
 const fs = require("fs")
 
 const nacionalities = [
     "US",
     "JP",
-    "GB"
+    "GB",
+    "KR"
 ]
 
 const handleAlbums = async () => {
@@ -38,25 +43,41 @@ const getAllData = async () => {
 }
 
 function removeDuplicates(array, properties) {
-    const duplicates = [];
-    const uniqueValues = [];
+    const duplicates = []
+    const uniqueValues = []
     for (let i = 0; i < array.length; i++) {
-        const currentItem = array[i];
+        const currentItem = array[i]
         if (uniqueValues.some(obj => {
-            return properties.every(prop => obj[prop] === currentItem[prop]);
+            return properties.every(prop => obj[prop] === currentItem[prop])
         })) {
-            duplicates.push(currentItem);
+            duplicates.push(currentItem)
         } else {
-            uniqueValues.push(currentItem);
+            uniqueValues.push(currentItem)
         }
     }
 
-    const result = array.filter(obj => duplicates.includes(obj));
-    array.splice(0, array.length, ...uniqueValues);
-
-    return result;
+    const result = array.filter(obj => duplicates.includes(obj))
+    array.splice(0, array.length, ...uniqueValues)
+    return result
 }
 
-handleAlbums()
-.then(() => handleImages()
-.then(() => checkInDB()))
+activateServer()
+
+cron.schedule("0 * * * *", () => {
+    const date = new Date
+    console.log(`Script executed: ${date}`)
+    handleAlbums()
+    .then(() => handleImages()
+    .then(() => checkInDB()))
+})
+
+cron.schedule("59 23 * * *", () => {
+    getSizeDB().then(size => {
+        if(size > 0) {
+            deleteData()
+            console.log(`DB Deleted we had: ${size} elements`)
+        } else{
+            console.log("Nothing on DB")
+        }
+    })
+})

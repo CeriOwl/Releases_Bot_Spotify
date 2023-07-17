@@ -1,12 +1,10 @@
 const db = require("./ConnectionDB")
 
-const deleteData = async () => {
+const getSizeDB = async () => {
     const songs = db.collection("songs-of-the-day")
     const query = songs.where("album_name", "!=", "")
     const all = await query.get()
-    all.forEach(async doc => {
-        doc.ref.delete()
-    })
+    return all.size
 }
 
-module.exports = { deleteData }
+module.exports = { getSizeDB }
