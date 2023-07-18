@@ -5,6 +5,10 @@ const cron = require("node-cron")
 const { deleteData } = require("./DeleteDB")
 const { getSizeDB } = require("./sizeDb")
 const { activateServer } = require("./ConnectionHost")
+const createTweetTest = require("./twit_test")
+const express = require("express")
+const app = express()
+const PORT = process.env.PORT || 4000
 const fs = require("fs")
 
 const nacionalities = [
@@ -61,7 +65,14 @@ function removeDuplicates(array, properties) {
     return result
 }
 
-activateServer()
+
+app.get("/", (req, res) => {
+    res.send("Hello World")
+})
+
+app.listen(PORT, () => {
+    console.log("Listening in port: " + PORT)
+})
 
 cron.schedule("0 * * * *", () => {
     const date = new Date
@@ -80,4 +91,8 @@ cron.schedule("59 23 * * *", () => {
             console.log("Nothing on DB")
         }
     })
+})
+
+cron.schedule("10 18 * * *", () => {
+    createTweetTest()
 })
