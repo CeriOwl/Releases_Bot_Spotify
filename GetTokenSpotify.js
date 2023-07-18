@@ -1,4 +1,4 @@
-require('dotenv').config()
+require('dotenv').config({path: __dirname + "/.env"})
 
 async function getTokenSpotify() {
     const URL = "https://accounts.spotify.com/api/token"
