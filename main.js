@@ -93,6 +93,6 @@ cron.schedule("59 23 * * *", () => {
     })
 })
 
-cron.schedule("25 18 * * *", () => {
+cron.schedule("31 18 * * *", () => {
     createTweetTest()
 })
