@@ -66,9 +66,32 @@ function removeDuplicates(array, properties) {
 
 app.use(express.static(__dirname))
 
-app.get("/cron_jobs/test", () => {
-    createTweetTest()
+app.get("/cron_jobs/create_tweet", (req, res) => {
+    const date = new Date
+    handleAlbums()
+    .then(() => handleImages()
+    .then(() => checkInDB()))
+    console.log(`Script executed: ${date}`)
+    res.sendStatus(200)
 })
+
+app.get("/cron_jobs/delete", (req, res) => {
+    getSizeDB().then(size => {
+        if(size > 0) {
+            deleteData()
+            console.log(`DB Deleted we had: ${size} elements`)
+        } else{
+            console.log("Nothing on DB")
+        }
+    })
+    res.sendStatus(200)
+})
+
+app.get("/cron_jobs/test", (req, res) => {
+    createTweetTest()
+    res.sendStatus(200)
+})
+
 app.get("/", (req, res) => {
     res.sendFile(__dirname + "index.html")
 })
@@ -78,25 +101,14 @@ app.listen(PORT, () => {
 })
 /*
 cron.schedule("0 * * * *", () => {
-    const date = new Date
-    handleAlbums()
-    .then(() => handleImages()
-    .then(() => checkInDB()))
-    console.log(`Script executed: ${date}`)
+
 })
 
 cron.schedule("59 23 * * *", () => {
-    getSizeDB().then(size => {
-        if(size > 0) {
-            deleteData()
-            console.log(`DB Deleted we had: ${size} elements`)
-        } else{
-            console.log("Nothing on DB")
-        }
-    })
+
 })
-*/
 
 cron.schedule("15 12 * * *", () => {
-    createTweetTest()
+
 })
+*/
