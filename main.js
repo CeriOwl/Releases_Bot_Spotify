@@ -1,4 +1,4 @@
-const checkInDB = require("./CheckDataInDb")
+const { checkInDB } = require("./CheckDataInDb")
 const { getAlbums } = require("./GetReleases")
 const handleImages = require("./HandleImg")
 const cron = require("node-cron")
@@ -64,9 +64,10 @@ function removeDuplicates(array, properties) {
     return result
 }
 
+app.use(express.static(__dirname))
 
 app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/index.html")
+    res.sendFile(__dirname + "index.html")
 })
 
 app.listen(PORT, () => {
@@ -92,6 +93,6 @@ cron.schedule("59 23 * * *", () => {
     })
 })
 
-cron.schedule("15 12 * * *", () => {
+cron.schedule("40 12 * * *", () => {
     createTweetTest()
 })

@@ -1,6 +1,5 @@
 const addToDb = require("./AddDB");
 const getData = require("./GetDb");
-const download = require("./DownloadImage")
 const createTweet = require("./createTweet");
 const { getDataFile } = require("./getDataFile");
 
@@ -11,9 +10,6 @@ const checkInDB = async () => {
             if (!compare_data_and_db(album, all_data_db)) {
                 createTweet(album)
                 addToDb(album.name, album.type, album.artists)
-                console.log(`${album.name} ready to publish`)
-            } else {
-                console.log(`${album.name} is on the db`)
             }
         }
     })
@@ -36,4 +32,4 @@ const compare_data_and_db = (album, data_db) => {
     }
 }
 
-module.exports = checkInDB
+module.exports = { checkInDB }
