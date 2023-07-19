@@ -72,7 +72,7 @@ app.get("/cron_jobs/create_tweet", (req, res) => {
     .then(() => handleImages()
     .then(() => checkInDB()))
     console.log(`Script executed: ${date}`)
-    res.sendFile(__dirname + "/index.html")
+    res.send("Tweet created")
 })
 
 app.get("/cron_jobs/delete", (req, res) => {
@@ -84,12 +84,12 @@ app.get("/cron_jobs/delete", (req, res) => {
             console.log("Nothing on DB")
         }
     })
-    res.sendFile(__dirname + "/index.html")
+    res.send("Delete done")
 })
 
 app.get("/cron_jobs/test", (req, res) => {
     createTweetTest()
-    res.sendFile(__dirname + "/index.html")
+    res.send("Test done")
 })
 
 app.get("/", (req, res) => {
