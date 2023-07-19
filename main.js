@@ -4,7 +4,6 @@ const handleImages = require("./HandleImg")
 const cron = require("node-cron")
 const { deleteData } = require("./DeleteDB")
 const { getSizeDB } = require("./sizeDb")
-const { activateServer } = require("./ConnectionHost")
 const createTweetTest = require("./twit_test")
 const express = require("express")
 const app = express()
@@ -67,7 +66,7 @@ function removeDuplicates(array, properties) {
 
 
 app.get("/", (req, res) => {
-    res.send("Hello World")
+    res.sendFile(__dirname + "/index.html")
 })
 
 app.listen(PORT, () => {
@@ -76,10 +75,10 @@ app.listen(PORT, () => {
 
 cron.schedule("0 * * * *", () => {
     const date = new Date
-    console.log(`Script executed: ${date}`)
     handleAlbums()
     .then(() => handleImages()
     .then(() => checkInDB()))
+    console.log(`Script executed: ${date}`)
 })
 
 cron.schedule("59 23 * * *", () => {
@@ -93,6 +92,6 @@ cron.schedule("59 23 * * *", () => {
     })
 })
 
-cron.schedule("31 18 * * *", () => {
+cron.schedule("15 12 * * *", () => {
     createTweetTest()
 })
