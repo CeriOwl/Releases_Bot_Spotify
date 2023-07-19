@@ -1,4 +1,4 @@
-const { checkInDB } = require("./CheckDataInDb")
+const checkInDB = require("./CheckDataInDb")
 const { getAlbums } = require("./GetReleases")
 const handleImages = require("./HandleImg")
 const cron = require("node-cron")
@@ -73,7 +73,7 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
     console.log("Listening in port: " + PORT)
 })
-
+/*
 cron.schedule("0 * * * *", () => {
     const date = new Date
     handleAlbums()
@@ -92,7 +92,8 @@ cron.schedule("59 23 * * *", () => {
         }
     })
 })
+*/
 
-cron.schedule("40 12 * * *", () => {
+cron.schedule("15 12 * * *", () => {
     createTweetTest()
 })
